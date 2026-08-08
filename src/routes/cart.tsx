@@ -17,7 +17,7 @@ export const Route = createFileRoute("/cart")({
 });
 
 function CartPage() {
-  const { items, setQty, remove, subtotal } = useCart();
+  const { items, setQuantity, remove, subtotal } = useCart();
 
   if (items.length === 0) {
     return (
@@ -55,15 +55,15 @@ function CartPage() {
                   <Link to="/product/$slug" params={{ slug: it.slug }} className="text-sm">
                     {it.name}
                   </Link>
-                  <span className="text-sm">{formatINR(it.price * it.qty)}</span>
+                  <span className="text-sm">{formatINR(it.price * it.quantity)}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center rounded-sm border border-border">
-                    <button className="px-2.5 py-1.5" onClick={() => setQty(it.id, it.qty - 1)}>
+                    <button className="px-2.5 py-1.5" onClick={() => setQuantity(it.id, it.quantity - 1)}>
                       <Minus className="size-3.5" />
                     </button>
-                    <span className="w-8 text-center text-xs">{it.qty}</span>
-                    <button className="px-2.5 py-1.5" onClick={() => setQty(it.id, it.qty + 1)}>
+                    <span className="w-8 text-center text-xs">{it.quantity}</span>
+                    <button className="px-2.5 py-1.5" onClick={() => setQuantity(it.id, it.quantity + 1)}>
                       <Plus className="size-3.5" />
                     </button>
                   </div>
