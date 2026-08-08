@@ -14,6 +14,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ShopRouteImport } from './routes/shop'
+import { Route as OrderIdRouteImport } from './routes/order.$id'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 import { Route as ApiPublicImgSplatRouteImport } from './routes/api/public/img/$'
 
@@ -42,6 +43,11 @@ const ShopRoute = ShopRouteImport.update({
   path: '/shop',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrderIdRoute = OrderIdRouteImport.update({
+  id: '/order/$id',
+  path: '/order/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProductSlugRoute = ProductSlugRouteImport.update({
   id: '/product/$slug',
   path: '/product/$slug',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/shop': typeof ShopRoute
+  '/order/$id': typeof OrderIdRoute
   '/product/$slug': typeof ProductSlugRoute
   '/api/public/img/$': typeof ApiPublicImgSplatRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/shop': typeof ShopRoute
+  '/order/$id': typeof OrderIdRoute
   '/product/$slug': typeof ProductSlugRoute
   '/api/public/img/$': typeof ApiPublicImgSplatRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/shop': typeof ShopRoute
+  '/order/$id': typeof OrderIdRoute
   '/product/$slug': typeof ProductSlugRoute
   '/api/public/img/$': typeof ApiPublicImgSplatRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/shop'
+    | '/order/$id'
     | '/product/$slug'
     | '/api/public/img/$'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/shop'
+    | '/order/$id'
     | '/product/$slug'
     | '/api/public/img/$'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/cart'
     | '/checkout'
     | '/shop'
+    | '/order/$id'
     | '/product/$slug'
     | '/api/public/img/$'
   fileRoutesById: FileRoutesById
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
   ShopRoute: typeof ShopRoute
+  OrderIdRoute: typeof OrderIdRoute
   ProductSlugRoute: typeof ProductSlugRoute
   ApiPublicImgSplatRoute: typeof ApiPublicImgSplatRoute
 }
@@ -158,6 +171,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShopRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/order/$id': {
+      id: '/order/$id'
+      path: '/order/$id'
+      fullPath: '/order/$id'
+      preLoaderRoute: typeof OrderIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/product/$slug': {
       id: '/product/$slug'
       path: '/product/$slug'
@@ -181,6 +201,7 @@ const rootRouteChildren: RootRouteChildren = {
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
   ShopRoute: ShopRoute,
+  OrderIdRoute: OrderIdRoute,
   ProductSlugRoute: ProductSlugRoute,
   ApiPublicImgSplatRoute: ApiPublicImgSplatRoute,
 }
