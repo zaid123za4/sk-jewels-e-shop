@@ -34,4 +34,4 @@ export const ORDER_STATUSES = [
 export type OrderStatus = (typeof ORDER_STATUSES)[number];
 
 export const FREE_SHIPPING_THRESHOLD = 999;
-export const SHIPPING_FEE = 79;
+export const SHIPPING_FEE = 69;
