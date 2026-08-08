@@ -80,7 +80,7 @@ function ProductPage() {
           <div className="aspect-[4/5] overflow-hidden rounded-sm bg-secondary">
             {images[active] ? (
               <img
-                src={imageUrl(images[active])}
+                src={imageUrl(images[active]) ?? undefined}
                 alt={product["name"] as string}
                 className="size-full object-cover"
               />
@@ -98,7 +98,7 @@ function ProductPage() {
                   onClick={() => setActive(i)}
                   className={`size-20 overflow-hidden rounded-sm border ${i === active ? "border-primary" : "border-border"}`}
                 >
-                  <img src={imageUrl(img)} alt="" className="size-full object-cover" />
+                  <img src={imageUrl(img) ?? undefined} alt="" className="size-full object-cover" />
                 </button>
               ))}
             </div>
