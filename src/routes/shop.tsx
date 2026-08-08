@@ -80,7 +80,7 @@ function Shop() {
       <div className="mt-8 flex flex-wrap items-center gap-2 border-b border-border pb-5">
         <Link
           to="/shop"
-          search={(prev) => ({ ...prev, category: undefined })}
+          search={(prev: ShopSearch) => ({ ...prev, category: undefined })}
           className={`rounded-full border px-4 py-1.5 text-sm ${!category ? "border-primary text-primary" : "border-border text-muted-foreground hover:text-foreground"}`}
         >
           All
@@ -89,7 +89,7 @@ function Shop() {
           <Link
             key={c.id}
             to="/shop"
-            search={(prev) => ({ ...prev, category: c.slug })}
+            search={(prev: ShopSearch) => ({ ...prev, category: c.slug })}
             className={`rounded-full border px-4 py-1.5 text-sm ${category === c.slug ? "border-primary text-primary" : "border-border text-muted-foreground hover:text-foreground"}`}
           >
             {c.name}
@@ -100,7 +100,7 @@ function Shop() {
             <Link
               key={s.key}
               to="/shop"
-              search={(prev) => ({ ...prev, sort: s.key })}
+              search={(prev: ShopSearch) => ({ ...prev, sort: s.key })}
               className={`text-xs ${(sort ?? "new") === s.key ? "text-foreground underline" : "text-muted-foreground hover:text-foreground"}`}
             >
               {s.label}
