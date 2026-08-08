@@ -181,7 +181,7 @@ function ProductsTab() {
 
   async function remove(id: string) {
     const { error } = await supabase.from("products").delete().eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Product deleted");
     void qc.invalidateQueries();
   }
@@ -367,7 +367,7 @@ function OrdersTab() {
 
   async function setStatus(id: string, status: string) {
     const { error } = await supabase.from("orders").update({ status }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Order updated");
     void qc.invalidateQueries();
   }
@@ -454,7 +454,7 @@ function CouponsTab() {
       discount_value: Number(value),
       min_order_amount: Number(min || 0),
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Coupon created");
     setCode("");
     setValue("");
@@ -538,7 +538,7 @@ function AccessTab() {
       role: role as "admin" | "product_manager" | "order_manager",
       max_uses: Number(maxUses || 1),
     });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Access code created");
     setCode("");
     void qc.invalidateQueries();
