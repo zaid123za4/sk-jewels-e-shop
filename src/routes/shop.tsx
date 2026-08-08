@@ -3,7 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { ProductCard, type ProductCardData } from "@/components/ProductCard";
 
-type ShopSearch = { category?: string; q?: string; sort?: string };
+type ShopSearch = {
+  category?: string | undefined;
+  q?: string | undefined;
+  sort?: string | undefined;
+};
 
 export const Route = createFileRoute("/shop")({
   validateSearch: (search: Record<string, unknown>): ShopSearch => ({
