@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Minus, Plus, ShoppingBag } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { formatINR, imageUrl } from "@/lib/shop";
+import { formatINR, imageUrl, variantLabel, type Variant } from "@/lib/shop";
 import { useCart } from "@/lib/cart-context";
 import { Button } from "@/components/ui/button";
 import { ProductCard, type ProductCardData } from "@/components/ProductCard";
@@ -26,6 +26,8 @@ function ProductPage() {
   const { add } = useCart();
   const [qty, setQty] = useState(1);
   const [active, setActive] = useState(0);
+  const [size, setSize] = useState<string | null>(null);
+  const [color, setColor] = useState<string | null>(null);
 
   const { data: product, isLoading } = useQuery({
     queryKey: ["product", slug],
@@ -42,20 +44,43 @@ function ProductPage() {
     },
   });
 
-  const { data: related } = useQuery({
-    enabled: !!product,
-    queryKey: ["related", product?.["category_id"]],
+  const productId = product?.["id"] as string | undefined;
+
+  const { data: variants } = useQuery({
+    enabled: !!productId,
+    queryKey: ["variants", productId],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("products")
-        .select("id,name,slug,price,compare_at_price,images,stock")
+        .from("product_variants")
+        .select("id,product_id,size,color,sku,price_delta,stock,is_active")
+        .eq("product_id", productId!)
         .eq("is_active", true)
-        .neq("slug", slug)
-        .limit(4);
+        .order("created_at");
       if (error) throw error;
-      return (data ?? []) as ProductCardData[];
+      return (data ?? []) as Variant[];
     },
   });
+
+  const options = variants ?? [];
+  const sizes = Array.from(new Set(options.map((v) => v.size).filter(Boolean))) as string[];
+  const colors = Array.from(new Set(options.map((v) => v.color).filter(Boolean))) as string[];
+
+  const selectedVariant =
+    options.length === 0
+      ? null
+      : (options.find(
+          (v) => (v.size ?? null) === (size ?? null) && (v.color ?? null) === (color ?? null),
+        ) ?? null);
+
+  function stockFor(part: { size?: string | null; color?: string | null }) {
+    return options
+      .filter(
+        (v) =>
+          (part.size === undefined || (v.size ?? null) === part.size) &&
+          (part.color === undefined || (v.color ?? null) === part.color),
+      )
+      .reduce((n, v) => n + v.stock, 0);
+  }
 
   if (isLoading) {
     return <div className="py-24 text-center text-sm text-muted-foreground">Loading…</div>;
@@ -63,7 +88,15 @@ function ProductPage() {
   if (!product) return null;
 
   const images: string[] = (product["images"] as string[]) ?? [];
-  const stock = product["stock"] as number;
+  const basePrice = product["price"] as number;
+  const hasVariants = options.length > 0;
+  const price = basePrice + Number(selectedVariant?.price_delta ?? 0);
+  const stock = hasVariants
+    ? (selectedVariant?.stock ?? stockFor({}))
+    : (product["stock"] as number);
+  const needsChoice =
+    hasVariants && ((sizes.length > 0 && !size) || (colors.length > 0 && !color) || !selectedVariant);
+
 
   return (
     <div className="mx-auto max-w-6xl px-5 py-10">
