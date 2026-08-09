@@ -248,8 +248,10 @@ function Checkout() {
             {items.map((i) => (
               <li key={i.id} className="flex justify-between gap-3">
                 <span className="text-muted-foreground">
-                  {i.name} × {i.quantity}
+                  {i.name}
+                  {i.variantLabel ? ` (${i.variantLabel})` : ""} × {i.quantity}
                 </span>
+
                 <span>{formatINR(i.price * i.quantity)}</span>
               </li>
             ))}

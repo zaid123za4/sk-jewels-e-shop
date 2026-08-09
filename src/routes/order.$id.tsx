@@ -51,7 +51,9 @@ function OrderPage() {
     name: string;
     price: number;
     quantity: number;
+    variant_label: string | null;
   }[];
+
 
   return (
     <div className="mx-auto max-w-2xl px-5 py-16">
