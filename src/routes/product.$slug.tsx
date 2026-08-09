@@ -145,7 +145,7 @@ function ProductPage() {
           <h1 className="mt-3 text-4xl leading-tight">{product["name"] as string}</h1>
 
           <div className="mt-4 flex items-baseline gap-3">
-            <span className="text-2xl">{formatINR(product["price"] as number)}</span>
+            <span className="text-2xl">{formatINR(price)}</span>
             {(product["compare_at_price"] as number | null) && (
               <span className="text-sm text-muted-foreground line-through">
                 {formatINR(product["compare_at_price"] as number)}
@@ -156,6 +156,50 @@ function ProductPage() {
           <p className="mt-5 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">
             {(product["description"] as string) || "A handpicked SK Jewels piece."}
           </p>
+
+          {sizes.length > 0 && (
+            <div className="mt-8">
+              <p className="text-xs uppercase tracking-widest text-muted-foreground">Size</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {sizes.map((s) => {
+                  const soldOut = stockFor({ size: s }) <= 0;
+                  return (
+                    <button
+                      key={s}
+                      type="button"
+                      disabled={soldOut}
+                      onClick={() => setSize(s)}
+                      className={`rounded-sm border px-4 py-2 text-sm ${size === s ? "border-primary text-primary" : "border-border"} ${soldOut ? "cursor-not-allowed text-muted-foreground line-through opacity-60" : ""}`}
+                    >
+                      {s}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {colors.length > 0 && (
+            <div className="mt-6">
+              <p className="text-xs uppercase tracking-widest text-muted-foreground">Colour</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {colors.map((c) => {
+                  const soldOut = stockFor({ color: c }) <= 0;
+                  return (
+                    <button
+                      key={c}
+                      type="button"
+                      disabled={soldOut}
+                      onClick={() => setColor(c)}
+                      className={`rounded-sm border px-4 py-2 text-sm ${color === c ? "border-primary text-primary" : "border-border"} ${soldOut ? "cursor-not-allowed text-muted-foreground line-through opacity-60" : ""}`}
+                    >
+                      {c}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           <div className="mt-8 flex items-center gap-4">
             <div className="flex items-center rounded-sm border border-border">
@@ -174,14 +218,18 @@ function ProductPage() {
             <Button
               size="lg"
               className="flex-1 rounded-sm"
-              disabled={stock <= 0}
+              disabled={stock <= 0 || needsChoice}
               onClick={() => {
+                const label = selectedVariant ? variantLabel(selectedVariant) : null;
                 add(
                   {
-                    id: product["id"] as string,
+                    id: selectedVariant?.id ?? (product["id"] as string),
+                    productId: product["id"] as string,
+                    variantId: selectedVariant?.id ?? null,
+                    variantLabel: label || null,
                     name: product["name"] as string,
                     slug: product["slug"] as string,
-                    price: product["price"] as number,
+                    price,
                     image: images[0] ?? null,
                     stock,
                   },
@@ -191,15 +239,26 @@ function ProductPage() {
               }}
             >
               <ShoppingBag className="mr-2 size-4" />
-              {stock <= 0 ? "Sold out" : "Add to bag"}
+              {stock <= 0 ? "Sold out" : needsChoice ? "Select an option" : "Add to bag"}
             </Button>
           </div>
 
           <ul className="mt-8 space-y-2 border-t border-border pt-6 text-xs text-muted-foreground">
             <li>Free shipping on orders over ₹999</li>
             <li>Cash on delivery or UPI available</li>
-            <li>{stock > 0 ? `${stock} in stock` : "Currently unavailable"}</li>
+            <li>
+              {stock > 0
+                ? `${stock} in stock${selectedVariant ? ` for ${variantLabel(selectedVariant)}` : ""}`
+                : "Currently unavailable"}
+            </li>
+            <li>
+              7-day returns &amp; exchanges —{" "}
+              <Link to="/returns" className="underline">
+                see policy
+              </Link>
+            </li>
           </ul>
+
         </div>
       </div>
 
