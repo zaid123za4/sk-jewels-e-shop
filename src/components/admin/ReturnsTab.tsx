@@ -19,8 +19,9 @@ export function ReturnsTab() {
     },
   });
 
-  async function patch(id: string, values: Record<string, unknown>) {
+  async function patch(id: string, values: { status?: string; staff_note?: string | null }) {
     const { error } = await supabase.from("return_requests").update(values).eq("id", id);
+
     if (error) {
       toast.error(error.message);
       return;
