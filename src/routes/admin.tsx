@@ -309,7 +309,17 @@ function ProductsTab() {
       </form>
 
       <div>
+        {editing ? (
+          <div className="mb-10">
+            <VariantsPanel productId={editing} />
+          </div>
+        ) : (
+          <p className="mb-6 text-xs text-muted-foreground">
+            Tip: save a product first, then press Edit on it to add sizes, colours and their stock.
+          </p>
+        )}
         <p className="eyebrow">Catalogue ({products?.length ?? 0})</p>
+
         <ul className="mt-4 divide-y divide-border border-y border-border">
           {products?.map((p) => (
             <li key={p.id} className="flex items-center gap-4 py-3 text-sm">
