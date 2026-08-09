@@ -92,11 +92,15 @@ function Account() {
           )}
         </div>
         <div className="flex gap-2">
+          <Button asChild variant="outline" className="rounded-sm">
+            <Link to="/returns">Returns</Link>
+          </Button>
           {roles.length > 0 && (
             <Button asChild variant="outline" className="rounded-sm">
               <Link to="/admin">Admin panel</Link>
             </Button>
           )}
+
           <Button variant="ghost" className="rounded-sm" onClick={signOut}>
             Sign out
           </Button>

@@ -52,10 +52,16 @@ export function Footer() {
               </Link>
             </li>
             <li>
+              <Link to="/returns" className="hover:text-foreground">
+                Returns &amp; exchanges
+              </Link>
+            </li>
+            <li>
               <Link to="/contact" className="hover:text-foreground">
                 Contact us
               </Link>
             </li>
+
             <li>
               <Link to="/auth" className="hover:text-foreground">
                 Sign in
