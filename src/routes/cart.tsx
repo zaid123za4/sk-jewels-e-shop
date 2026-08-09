@@ -52,11 +52,17 @@ function CartPage() {
               </Link>
               <div className="flex flex-1 flex-col justify-between">
                 <div className="flex justify-between gap-4">
-                  <Link to="/product/$slug" params={{ slug: it.slug }} className="text-sm">
-                    {it.name}
-                  </Link>
+                  <div>
+                    <Link to="/product/$slug" params={{ slug: it.slug }} className="text-sm">
+                      {it.name}
+                    </Link>
+                    {it.variantLabel && (
+                      <p className="mt-0.5 text-xs text-muted-foreground">{it.variantLabel}</p>
+                    )}
+                  </div>
                   <span className="text-sm">{formatINR(it.price * it.quantity)}</span>
                 </div>
+
                 <div className="flex items-center justify-between">
                   <div className="flex items-center rounded-sm border border-border">
                     <button className="px-2.5 py-1.5" onClick={() => setQuantity(it.id, it.quantity - 1)}>

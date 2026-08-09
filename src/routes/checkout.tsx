@@ -133,7 +133,9 @@ function Checkout() {
       const { error: itemsError } = await supabase.from("order_items").insert(
         items.map((i) => ({
           order_id: order.id,
-          product_id: i.id,
+          product_id: i.productId,
+          variant_id: i.variantId,
+          variant_label: i.variantLabel,
           name: i.name,
           price: i.price,
           quantity: i.quantity,
@@ -141,6 +143,12 @@ function Checkout() {
         })),
       );
       if (itemsError) throw itemsError;
+
+      // Inventory is decremented server-side for the exact variant bought.
+      await supabase.rpc("consume_stock_for_order", { _order_id: order.id });
+
+
+
 
       if (saveAddress) {
         await supabase.from("addresses").insert({ ...form, user_id: user.id, country: "India" });
@@ -240,8 +248,10 @@ function Checkout() {
             {items.map((i) => (
               <li key={i.id} className="flex justify-between gap-3">
                 <span className="text-muted-foreground">
-                  {i.name} × {i.quantity}
+                  {i.name}
+                  {i.variantLabel ? ` (${i.variantLabel})` : ""} × {i.quantity}
                 </span>
+
                 <span>{formatINR(i.price * i.quantity)}</span>
               </li>
             ))}

@@ -51,7 +51,9 @@ function OrderPage() {
     name: string;
     price: number;
     quantity: number;
+    variant_label: string | null;
   }[];
+
 
   return (
     <div className="mx-auto max-w-2xl px-5 py-16">
@@ -70,12 +72,14 @@ function OrderPage() {
           {items.map((i) => (
             <li key={i.id} className="flex justify-between gap-3">
               <span className="text-muted-foreground">
-                {i.name} × {i.quantity}
+                {i.name}
+                {i.variant_label ? ` (${i.variant_label})` : ""} × {i.quantity}
               </span>
               <span>{formatINR(Number(i.price) * i.quantity)}</span>
             </li>
           ))}
         </ul>
+
         <div className="mt-5 space-y-2 border-t border-border pt-5 text-sm">
           <div className="flex justify-between">
             <span className="text-muted-foreground">Subtotal</span>
@@ -114,14 +118,20 @@ function OrderPage() {
         </p>
       </div>
 
-      <div className="mt-8 flex justify-center gap-3">
+      <div className="mt-8 flex flex-wrap justify-center gap-3">
         <Button asChild variant="outline" className="rounded-sm">
           <Link to="/account">View all orders</Link>
+        </Button>
+        <Button asChild variant="outline" className="rounded-sm">
+          <Link to="/returns" search={{ order: data.order_number }}>
+            Return or exchange
+          </Link>
         </Button>
         <Button asChild className="rounded-sm">
           <Link to="/shop">Keep shopping</Link>
         </Button>
       </div>
+
     </div>
   );
 }
