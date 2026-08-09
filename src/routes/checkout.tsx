@@ -144,34 +144,10 @@ function Checkout() {
       );
       if (itemsError) throw itemsError;
 
-      // Decrement inventory for the exact variant / product bought.
-      for (const i of items) {
-        if (i.variantId) {
-          const { data: v } = await supabase
-            .from("product_variants")
-            .select("stock")
-            .eq("id", i.variantId)
-            .maybeSingle();
-          if (v) {
-            await supabase
-              .from("product_variants")
-              .update({ stock: Math.max(0, Number(v.stock) - i.quantity) })
-              .eq("id", i.variantId);
-          }
-        } else {
-          const { data: p } = await supabase
-            .from("products")
-            .select("stock")
-            .eq("id", i.productId)
-            .maybeSingle();
-          if (p) {
-            await supabase
-              .from("products")
-              .update({ stock: Math.max(0, Number(p.stock) - i.quantity) })
-              .eq("id", i.productId);
-          }
-        }
-      }
+      // Inventory is decremented server-side for the exact variant bought.
+      await supabase.rpc("consume_stock_for_order", { _order_id: order.id });
+
+
 
 
       if (saveAddress) {
