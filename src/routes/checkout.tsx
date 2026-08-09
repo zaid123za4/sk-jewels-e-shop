@@ -133,7 +133,9 @@ function Checkout() {
       const { error: itemsError } = await supabase.from("order_items").insert(
         items.map((i) => ({
           order_id: order.id,
-          product_id: i.id,
+          product_id: i.productId,
+          variant_id: i.variantId,
+          variant_label: i.variantLabel,
           name: i.name,
           price: i.price,
           quantity: i.quantity,
@@ -141,6 +143,36 @@ function Checkout() {
         })),
       );
       if (itemsError) throw itemsError;
+
+      // Decrement inventory for the exact variant / product bought.
+      for (const i of items) {
+        if (i.variantId) {
+          const { data: v } = await supabase
+            .from("product_variants")
+            .select("stock")
+            .eq("id", i.variantId)
+            .maybeSingle();
+          if (v) {
+            await supabase
+              .from("product_variants")
+              .update({ stock: Math.max(0, Number(v.stock) - i.quantity) })
+              .eq("id", i.variantId);
+          }
+        } else {
+          const { data: p } = await supabase
+            .from("products")
+            .select("stock")
+            .eq("id", i.productId)
+            .maybeSingle();
+          if (p) {
+            await supabase
+              .from("products")
+              .update({ stock: Math.max(0, Number(p.stock) - i.quantity) })
+              .eq("id", i.productId);
+          }
+        }
+      }
+
 
       if (saveAddress) {
         await supabase.from("addresses").insert({ ...form, user_id: user.id, country: "India" });
