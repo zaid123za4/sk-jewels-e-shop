@@ -1,14 +1,16 @@
-# Welcome to your Lovable project
+# SK Jewels E-Shop
+
+build me a website for this content createor https://www.instagram.com/sk_jewels_18?igsh=N29uczJlYnp6dmdz make sure u add each and every produt in the video shown as well payment portal , login , sign up , address etc build a funtionalk ecormace website should have each and evey thing to sell and a detaded page like /admin which is password protected in which we can track , add more producta see produts change anything create new cupon codes etc
 
 This project was built with [Lovable](https://lovable.dev).
 
 ## Build with Lovable
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/8a9a9acb-37f0-4fc9-8c16-22e5a10b4e3d).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 
@@ -20,10 +22,3 @@ cd <repository-name>
 npm i
 npm run dev
 ```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
