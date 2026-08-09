@@ -1,7 +1,11 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
 export type CartItem = {
+  /** Unique per cart line: variant id when a variant is chosen, else product id. */
   id: string;
+  productId: string;
+  variantId: string | null;
+  variantLabel: string | null;
   name: string;
   slug: string;
   price: number;
@@ -21,7 +25,7 @@ type CartValue = {
 };
 
 const CartContext = createContext<CartValue | null>(null);
-const STORAGE_KEY = "skjewels.cart.v1";
+const STORAGE_KEY = "skjewels.cart.v2";
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);

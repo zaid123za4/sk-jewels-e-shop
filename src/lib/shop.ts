@@ -35,3 +35,38 @@ export type OrderStatus = (typeof ORDER_STATUSES)[number];
 
 export const FREE_SHIPPING_THRESHOLD = 999;
 export const SHIPPING_FEE = 69;
+
+export type Variant = {
+  id: string;
+  product_id: string;
+  size: string | null;
+  color: string | null;
+  sku: string | null;
+  price_delta: number;
+  stock: number;
+  is_active: boolean;
+};
+
+export function variantLabel(v: { size?: string | null; color?: string | null }): string {
+  return [v.size, v.color].filter(Boolean).join(" · ");
+}
+
+export const RETURN_STATUSES = [
+  "requested",
+  "approved",
+  "rejected",
+  "in_transit",
+  "refunded",
+  "exchanged",
+  "closed",
+] as const;
+
+export const RETURN_REASONS = [
+  "Damaged or broken on arrival",
+  "Wrong item received",
+  "Size or colour doesn't suit",
+  "Not as described",
+  "Changed my mind",
+  "Other",
+] as const;
+
