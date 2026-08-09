@@ -61,7 +61,23 @@ function ProductPage() {
     },
   });
 
+  const { data: related } = useQuery({
+    enabled: !!productId,
+    queryKey: ["related", productId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("products")
+        .select("id,name,slug,price,compare_at_price,images,stock")
+        .eq("is_active", true)
+        .neq("slug", slug)
+        .limit(4);
+      if (error) throw error;
+      return (data ?? []) as ProductCardData[];
+    },
+  });
+
   const options = variants ?? [];
+
   const sizes = Array.from(new Set(options.map((v) => v.size).filter(Boolean))) as string[];
   const colors = Array.from(new Set(options.map((v) => v.color).filter(Boolean))) as string[];
 
