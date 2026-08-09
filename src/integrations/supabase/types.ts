@@ -167,6 +167,8 @@ export type Database = {
           price: number
           product_id: string | null
           quantity: number
+          variant_id: string | null
+          variant_label: string | null
         }
         Insert: {
           id?: string
@@ -176,6 +178,8 @@ export type Database = {
           price: number
           product_id?: string | null
           quantity?: number
+          variant_id?: string | null
+          variant_label?: string | null
         }
         Update: {
           id?: string
@@ -185,6 +189,8 @@ export type Database = {
           price?: number
           product_id?: string | null
           quantity?: number
+          variant_id?: string | null
+          variant_label?: string | null
         }
         Relationships: [
           {
@@ -199,6 +205,13 @@ export type Database = {
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_variant_id_fkey"
+            columns: ["variant_id"]
+            isOneToOne: false
+            referencedRelation: "product_variants"
             referencedColumns: ["id"]
           },
         ]
@@ -256,6 +269,53 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      product_variants: {
+        Row: {
+          color: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          price_delta: number
+          product_id: string
+          size: string | null
+          sku: string | null
+          stock: number
+          updated_at: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          price_delta?: number
+          product_id: string
+          size?: string | null
+          sku?: string | null
+          stock?: number
+          updated_at?: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          price_delta?: number
+          product_id?: string
+          size?: string | null
+          sku?: string | null
+          stock?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_variants_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       products: {
         Row: {
@@ -339,6 +399,56 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      return_requests: {
+        Row: {
+          created_at: string
+          details: string | null
+          id: string
+          items: string | null
+          order_id: string
+          reason: string
+          request_type: string
+          staff_note: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          items?: string | null
+          order_id: string
+          reason: string
+          request_type?: string
+          staff_note?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          details?: string | null
+          id?: string
+          items?: string | null
+          order_id?: string
+          reason?: string
+          request_type?: string
+          staff_note?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "return_requests_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
