@@ -486,6 +486,10 @@ export type Database = {
       }
       can_manage_catalog: { Args: { _user_id: string }; Returns: boolean }
       can_manage_orders: { Args: { _user_id: string }; Returns: boolean }
+      consume_stock_for_order: {
+        Args: { _order_id: string }
+        Returns: undefined
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
