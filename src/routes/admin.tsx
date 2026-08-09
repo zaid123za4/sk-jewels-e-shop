@@ -10,6 +10,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { VariantsPanel } from "@/components/admin/VariantsPanel";
+import { ReturnsTab } from "@/components/admin/ReturnsTab";
+
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -24,7 +27,7 @@ export const Route = createFileRoute("/admin")({
   component: Admin,
 });
 
-type Tab = "products" | "orders" | "coupons" | "access";
+type Tab = "products" | "orders" | "returns" | "coupons" | "access";
 
 function Admin() {
   const { user, loading, isAdmin, canManageCatalog, canManageOrders, hasAnyRole } = useAuth();
@@ -55,9 +58,11 @@ function Admin() {
   const tabs: { key: Tab; label: string; visible: boolean }[] = [
     { key: "products", label: "Products", visible: canManageCatalog },
     { key: "orders", label: "Orders", visible: canManageOrders },
+    { key: "returns", label: "Returns", visible: canManageOrders },
     { key: "coupons", label: "Coupons", visible: isAdmin },
     { key: "access", label: "Access codes", visible: isAdmin },
   ];
+
   const visible = tabs.filter((t) => t.visible);
   const current = visible.some((t) => t.key === tab) ? tab : visible[0]?.key;
 
@@ -81,6 +86,8 @@ function Admin() {
       <div className="mt-8">
         {current === "products" && <ProductsTab />}
         {current === "orders" && <OrdersTab />}
+        {current === "returns" && <ReturnsTab />}
+
         {current === "coupons" && <CouponsTab />}
         {current === "access" && <AccessTab />}
       </div>
